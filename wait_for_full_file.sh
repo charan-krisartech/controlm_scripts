@@ -1,4 +1,5 @@
 #!/bin/bash
+
 filePath="$1"
 
 if ls "$filePath" 1> /dev/null 2>&1; then
