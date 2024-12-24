@@ -8,6 +8,7 @@ filePath="$sourceFolderPath/$filePattern"
 file_flag=false
 
 if ls "$filePath" 1> /dev/null 2>&1; then
+    currentTime=$(date -u +%T)
     echo "File found at $currentTime."
     file_flag=true
 fi
@@ -24,6 +25,7 @@ if file_flag; then
         sleep $waitTime;
         currentSize=$(wc -c <"$filePath")
 
+        currentTime=$(date -u +%T)
         echo "File size is increasing. Current size at $currentTime is: $currentSize"
     done
 
