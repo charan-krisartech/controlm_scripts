@@ -1,47 +1,35 @@
 #!/bin/bash
 
-filePath="$1"
+sourceFolderPath="$1"
+filePattern="$2"
+waitTime=${3:-10} # Default is 10 seconds
+
+filePath="$sourceFolderPath/$filePattern"
+file_flag=false
 
 if ls "$filePath" 1> /dev/null 2>&1; then
-  previousSize=$(wc -c <"$filePath")
-  currentTime=$(date -u +%T)
-  echo "File found at $currentTime. Size: $previousSize"
-
-  sleep 10;
-  currentSize=$(wc -c <"$filePath")
-else
-  exit 1
+    echo "File found at $currentTime."
+    file_flag=true
 fi
 
-# File size check
-while [ $currentSize -gt $previousSize ]; do
-#  currentDate=$(date)
-  currentTime=$(date -u +%T)
+if file_flag; then
+    echo "Checking for file size"
 
-  echo "File size is increasing. Current size at $currentTime is: $currentSize"
+    # File size check
+    do_flag=true
+    while $do_flag || [ $currentSize -gt $previousSize ]; do
+        do_flag=false
 
-  previousSize=$currentSize
-  sleep 10;
-  currentSize=$(wc -c <"$filePath")
-done
+        previousSize=$(wc -c <"$filePath")
+        sleep $waitTime;
+        currentSize=$(wc -c <"$filePath")
 
-echo "File stopped increasing"
-exit 0
+        echo "File size is increasing. Current size at $currentTime is: $currentSize"
+    done
 
-
-#  if ls "$filePath"; 1> /dev/null 2>&1; then
-#    actualSize=$(wc -c <"$filePath")
-#
-#    if [ "$actualSize" -eq "$initialSize" ]; then
-#      echo "File stopped increasing"
-#      break
-#
-#    elif [ "$actualSize" -eq "$currentSize" ]; then
-#      echo "File stopped increasing"
-#      break
-#
-#    else
-#      currentSize=$(wc -c <"$filePath")
-#    fi
-#
-#  fi
+    echo "File stopped increasing"
+    exit 0
+else
+    echo "File not found"
+    exit 1
+fi

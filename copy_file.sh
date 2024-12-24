@@ -1,19 +1,22 @@
 #!/bin/bash
 
-filePattern="$1"
-sourceFolderPath="$2"
+sourceFolderPath="$1"
+filePattern="$2"
 targetFolderPath="$3"
 
-if [ -f "$sourceFolderPath/$filePattern" ]; then
+sourceFilePath="$sourceFolderPath/$filePattern"
+targetFilePath="$targetFolderPath/$filePattern"
+
+if [ -f "$sourceFilePath" ]; then
   echo "Source file: $filePattern"
   echo "Source folder: $sourceFolderPath"
   echo "Target folder: $targetFolderPath"
 
-  if [ -f "$targetFolderPath/$filePattern" ]; then
-    echo "File with the same name exists in target location: $targetFolderPath/$filePattern"
+  if [ -f "$targetFilePath" ]; then
+    echo "File with the same name exists in target location: $targetFilePath"
     exit 1
   else
-    mv "$sourceFolderPath/$filePattern" "$targetFolderPath"
+    mv "$sourceFilePath" "$targetFolderPath"
     echo "File moved successfully!"
     exit 0
   fi
