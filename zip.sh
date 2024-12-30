@@ -9,10 +9,10 @@ if [ ! -d "$sourceDir" ]; then
     exit 1
 fi
 
-# Semi-colon seperated file patterns
+# Semi-colon separated file patterns
 IFS=';'
 read -r -a patterns_array <<< "$filePatterns"
-echo "$patterns_array"
+echo "${patterns_array[@]}"
 
 # Zip files matching each pattern in the source folder into the target folder
 for pattern in "${patterns_array[@]}"; do
@@ -20,11 +20,11 @@ for pattern in "${patterns_array[@]}"; do
         echo $file
         if [ -f "$file" ]; then
             filename=$(basename "$file")
-            zip -j "$OUTPUT_DIR/${filename}.zip" "$file"
+            zip -j "$targetDir/${filename}.zip" "$file"
 
             # $? means exit status of previous command
             if [ $? -eq 0 ]; then
-                echo "Zipped $file to $OUTPUT_DIR/${filename}.zip"
+                echo "Zipped $file to $targetDir/${filename}.zip"
             else
                 echo "Failed to zip $file"
             fi
