@@ -20,7 +20,8 @@ for pattern in "${patterns_array[@]}"; do
         echo $file
         if [ -f "$file" ]; then
             filename=$(basename "$file")
-            zip -j "$targetDir/${filename}.zip" "$file"
+            echo "$filename"
+            zip -j $targetDir/${filename}.zip $file
 
             # $? means exit status of previous command
             if [ $? -eq 0 ]; then
